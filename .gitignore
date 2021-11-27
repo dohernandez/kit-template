@@ -12,4 +12,11 @@
 *.out
 
 # Dependency directories (remove the comment below to include it)
-# vendor/
+/*.coverprofile
+/.vscode
+/bench-*.txt
+
+# These are configuration that might be defined in the global .gitignore, but I added here too
+.env
+vendor/
+bin/
