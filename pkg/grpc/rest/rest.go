@@ -8,8 +8,11 @@ import (
 	"net/http"
 
 	"github.com/bool64/ctxd"
+	"github.com/dohernandez/kit-template/pkg/servicing"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 )
+
+var serverType = "REST"
 
 // Option sets up a server mux.
 type Option func(mux *Server)
@@ -128,7 +131,7 @@ func (s *Server) Listener() net.Listener {
 }
 
 // WithShutdownSignal adds channels to wait for shutdown and to report shutdown finished.
-func (s *Server) WithShutdownSignal(shutdown <-chan struct{}, done chan<- struct{}) *Server {
+func (s *Server) WithShutdownSignal(shutdown <-chan struct{}, done chan<- struct{}) servicing.Service {
 	s.shutdownSignal = shutdown
 	s.shutdownDone = done
 
@@ -202,4 +205,14 @@ func (s *Server) handleServerShutdown() {
 
 		close(s.shutdownDone)
 	}()
+}
+
+// Name Service name.
+func (s *Server) Name() string {
+	return serverType
+}
+
+// Addr service address.
+func (s *Server) Addr() string {
+	return s.listener.Addr().String()
 }

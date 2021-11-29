@@ -7,10 +7,13 @@ import (
 	"net"
 
 	"github.com/bool64/ctxd"
+	"github.com/dohernandez/kit-template/pkg/servicing"
 	grpcPrometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
+
+var serverType = "GRPC"
 
 // Option sets up a server.
 type Option func(srv *Server)
@@ -106,7 +109,7 @@ func (s *Server) Listener() net.Listener {
 }
 
 // WithShutdownSignal adds channels to wait for shutdown and to report shutdown finished.
-func (s *Server) WithShutdownSignal(shutdown <-chan struct{}, done chan<- struct{}) *Server {
+func (s *Server) WithShutdownSignal(shutdown <-chan struct{}, done chan<- struct{}) servicing.Service {
 	s.shutdownSignal = shutdown
 	s.shutdownDone = done
 
@@ -218,4 +221,14 @@ func defaultConfig() config {
 		addr:                ":0",
 		shouldCloseListener: true,
 	}
+}
+
+// Name Service name.
+func (s *Server) Name() string {
+	return serverType
+}
+
+// Addr service address.
+func (s *Server) Addr() string {
+	return s.listener.Addr().String()
 }

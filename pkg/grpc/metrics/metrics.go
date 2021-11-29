@@ -9,10 +9,13 @@ import (
 
 	"contrib.go.opencensus.io/exporter/prometheus"
 	"github.com/bool64/ctxd"
+	"github.com/dohernandez/kit-template/pkg/servicing"
 	grpcPrometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 	prom "github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/collectors"
 )
+
+var serverType = "Metrics"
 
 // Option sets up a metrics server.
 type Option func(metrics *Server)
@@ -95,7 +98,7 @@ func (s *Server) ServerMetrics() *grpcPrometheus.ServerMetrics {
 }
 
 // WithShutdownSignal adds channels to wait for shutdown and to report shutdown finished.
-func (s *Server) WithShutdownSignal(shutdown <-chan struct{}, done chan<- struct{}) *Server {
+func (s *Server) WithShutdownSignal(shutdown <-chan struct{}, done chan<- struct{}) servicing.Service {
 	s.shutdownSignal = shutdown
 	s.shutdownDone = done
 
@@ -187,4 +190,14 @@ func (s *Server) handleServerShutdown() {
 
 		close(s.shutdownDone)
 	}()
+}
+
+// Name Service name.
+func (s *Server) Name() string {
+	return serverType
+}
+
+// Addr service address.
+func (s *Server) Addr() string {
+	return s.listener.Addr().String()
 }
