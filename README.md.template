@@ -32,7 +32,7 @@ If you want to submit an architectural change to the service, please create a ne
 
 ### Prerequisites
 
-To run this application on your machine, you must have `docker` && `docker-compose` installed.
+To develop and run this application on your machine, you must have `make` && `jq` &&` docker` && `docker-compose` installed.
 
 The service uses `dep` to manage its dependencies. All the dependencies can be installed using the following `make` command:
 
