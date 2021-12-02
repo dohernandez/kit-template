@@ -15,7 +15,6 @@ import (
 	grpcMiddleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	mux "github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	v3 "github.com/swaggest/swgui/v3"
-	"google.golang.org/grpc"
 )
 
 // NewRESTService creates an instance of REST service based on the GRPC service.
@@ -24,23 +23,22 @@ func NewRESTService(
 	cfg *config.Config,
 	locator *Locator,
 	srv *service.KitTemplateService,
-	interceptors []grpc.UnaryServerInterceptor,
+	opts ...grpcRest.Option,
 ) (*grpcRest.Server, error) {
-	restServiceRegister := service.NewRESTServiceRegister(srv)
-
 	restTListener, err := net.Listen("tcp", fmt.Sprintf(":%d", cfg.AppRESTPort))
 	if err != nil {
 		return nil, err
 	}
 
-	restServiceRegister.WithUnaryServerInterceptor(
-		grpcMiddleware.ChainUnaryServer(interceptors...),
-	)
+	srvREST := service.NewKitTemplateRESTService(srv).
+		WithUnaryServerInterceptor(
+			grpcMiddleware.ChainUnaryServer(locator.GRPCUnitaryInterceptors...),
+		)
 
-	opts := []grpcRest.Option{
+	opts = append(opts,
 		grpcRest.WithListener(restTListener, true),
 		// use to registering point service using the point service registerer
-		grpcRest.WithService(restServiceRegister),
+		grpcRest.WithService(srvREST),
 
 		// handler root path
 		grpcRest.WithHandlerPathOption(func(mux *mux.ServeMux) error {
@@ -55,7 +53,7 @@ func NewRESTService(
 				}
 			})
 		}),
-	}
+	)
 
 	swaggerOptions := swaggerHandlersOptions(ctx, locator)
 	opts = append(opts, swaggerOptions...)

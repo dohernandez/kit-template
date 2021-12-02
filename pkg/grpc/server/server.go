@@ -79,12 +79,20 @@ func WithMetrics(metrics *grpcPrometheus.ServerMetrics) Option {
 	}
 }
 
+// WithAddrAssigned sets service to ask for listener assigned address. Mainly used when the port to the listener is assigned dynamically.
+func WithAddrAssigned() Option {
+	return func(srv *Server) {
+		srv.AddrAssigned = make(chan string, 1)
+	}
+}
+
 // Server is a wrapper around grpc.Server.
 type Server struct {
 	config config
 
-	listener net.Listener
-	server   *grpc.Server
+	listener     net.Listener
+	server       *grpc.Server
+	AddrAssigned chan string
 
 	shutdownSignal <-chan struct{}
 	shutdownDone   chan<- struct{}
@@ -149,6 +157,11 @@ func (s *Server) Start() error {
 			return
 		}
 	}()
+
+	// the server is being asked for the dynamical address assigned.
+	if s.AddrAssigned != nil {
+		s.AddrAssigned <- s.listener.Addr().String()
+	}
 
 	if err := <-s.listeningError; err != nil {
 		return ctxd.WrapError(context.Background(), err, "GRPC server failed",

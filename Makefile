@@ -31,10 +31,12 @@ endif
 -include $(DEVGO_PATH)/makefiles/build.mk
 -include $(DEVGO_PATH)/makefiles/lint.mk
 -include $(DEVGO_PATH)/makefiles/test-unit.mk
+-include $(DEVGO_PATH)/makefiles/test-integration.mk
 -include $(DEVGO_PATH)/makefiles/bench.mk
 -include $(DEVGO_PATH)/makefiles/reset-ci.mk
 
 # Add your custom targets here.
+BUILD_LDFLAGS="-s -w"
 BUILD_PKG = ./cmd/kit-template
 
 APP_PATH = $(shell pwd)
@@ -48,7 +50,7 @@ SWAGGER_PATH = $(APP_PATH)/resources/swagger
 -include $(APP_PATH)/resources/app/makefiles/protoc.mk
 
 ## Run tests
-test: test-unit
+test: test-unit test-integration
 
 ## Generate code from proto file(s)
 proto-gen-code: protoc-cli

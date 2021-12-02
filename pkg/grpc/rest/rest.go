@@ -60,6 +60,13 @@ func WithHandlerPathOption(opts ...HandlerPathFunc) Option {
 	}
 }
 
+// WithAddrAssigned sets service to ask for listener assigned address. Mainly used when the port to the listener is assigned dynamically.
+func WithAddrAssigned() Option {
+	return func(srv *Server) {
+		srv.AddrAssigned = make(chan string, 1)
+	}
+}
+
 type config struct {
 	addr                string
 	shouldCloseListener bool
@@ -72,9 +79,10 @@ type config struct {
 type Server struct {
 	config config
 
-	listener net.Listener
-	mux      *runtime.ServeMux
-	server   *http.Server
+	listener     net.Listener
+	mux          *runtime.ServeMux
+	server       *http.Server
+	AddrAssigned chan string
 
 	shutdownSignal <-chan struct{}
 	shutdownDone   chan<- struct{}
@@ -147,7 +155,7 @@ func (s *Server) Start() error {
 
 	s.handleServerShutdown()
 
-	s.listeningError = make(chan error)
+	s.listeningError = make(chan error, 1)
 
 	go func() {
 		defer close(s.listeningError)
@@ -170,6 +178,13 @@ func (s *Server) Start() error {
 			return
 		}
 	}()
+
+	// the server is being asked for the dynamical address assigned.
+	if s.AddrAssigned != nil {
+		s.AddrAssigned <- s.listener.Addr().String()
+	}
+
+	s.AddrAssigned <- s.listener.Addr().String()
 
 	if err := <-s.listeningError; err != nil {
 		return ctxd.WrapError(context.Background(), err, "REST server failed",

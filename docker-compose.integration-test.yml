@@ -1,23 +1,5 @@
-version: '3.9'
+version: '2.4' # Version 2 allows health checking outside of docker stack.
 services:
-  app:
-    build:
-      context: .
-      dockerfile: resources/docker/dev/Dockerfile
-    container_name: kittemplate-app
-    env_file:
-      - .env
-    ports:
-      - "8000:8000"
-      - "8080:8080"
-      - "8010:8010"
-    volumes:
-      - .:/go/src/github.com/dohernandez/kit-template
-      - /tmp/go-build:/root/.cache/go-build
-    depends_on:
-      database:
-        condition: service_healthy
-
   database-migrate:
     image: migrate/migrate
     container_name: kittemplate-database-migrate
@@ -33,6 +15,12 @@ services:
       - "-path"
       - "/resources/migrations"
       - "up"
+    healthcheck:
+      test: exit 0
+      interval: 10s
+      retries: 5
+      start_period: 5s
+      timeout: 10s
 
   database:
     image: postgres:13.1-alpine

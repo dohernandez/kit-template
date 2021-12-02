@@ -6,7 +6,7 @@ import (
 	"github.com/bool64/ctxd"
 	"github.com/dohernandez/kit-template/internal/platform/app"
 	"github.com/dohernandez/kit-template/internal/platform/config"
-	"github.com/dohernandez/kit-template/internal/platform/service"
+	grpcServer "github.com/dohernandez/kit-template/pkg/grpc/server"
 	"github.com/dohernandez/kit-template/pkg/must"
 	"github.com/dohernandez/kit-template/pkg/servicing"
 )
@@ -19,34 +19,34 @@ func main() {
 	cfg, err := config.GetConfig()
 	must.NotFail(ctxd.WrapError(ctx, err, "failed to load configurations"))
 
-	// initialize locator
-	l, err := app.NewServiceLocator(cfg)
-	must.NotFail(ctxd.WrapError(ctx, err, "failed to init locator"))
-
 	srvMetrics, err := app.NewMetricsService(ctx, cfg)
 	must.NotFail(ctxd.WrapError(ctx, err, "failed to init Metrics service"))
 
-	srv := service.NewKitTemplateService()
+	// initialize locator
+	deps, err := app.NewServiceLocator(cfg, func(l *app.Locator) {
+		l.GRPCUnitaryInterceptors = append(l.GRPCUnitaryInterceptors,
+			// adding metrics
+			srvMetrics.ServerMetrics().UnaryServerInterceptor(),
+		)
+	})
+	must.NotFail(ctxd.WrapError(ctx, err, "failed to init locator"))
 
-	// enabling interceptor for grpc and rest
-	interceptors := app.InitGRPCUnitaryInterceptors(l, srvMetrics)
-
-	srvGRPC, err := app.NewGRPCService(ctx, cfg, l, srv, interceptors, srvMetrics)
+	srvGRPC, srv, err := app.NewGRPCService(ctx, cfg, deps, grpcServer.WithMetrics(srvMetrics.ServerMetrics()))
 	must.NotFail(ctxd.WrapError(ctx, err, "failed to init GRPC service"))
 
-	srvREST, err := app.NewRESTService(ctx, cfg, l, srv, interceptors)
+	srvREST, err := app.NewRESTService(ctx, cfg, deps, srv)
 	must.NotFail(ctxd.WrapError(ctx, err, "failed to init REST service"))
 
 	services := servicing.WithGracefulSutDown(
 		func(ctx context.Context) {
-			app.GracefulDBShutdown(ctx, l)
+			app.GracefulDBShutdown(ctx, deps)
 		},
 	)
 
 	err = services.Start(
 		ctx,
 		func(ctx context.Context, msg string) {
-			l.CtxdLogger().Important(ctx, msg)
+			deps.CtxdLogger().Important(ctx, msg)
 		},
 		srvMetrics,
 		srvGRPC,
