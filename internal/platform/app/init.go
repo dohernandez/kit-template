@@ -10,6 +10,8 @@ import (
 	"github.com/bool64/sqluct"
 	"github.com/bool64/zapctxd"
 	"github.com/dohernandez/kit-template/internal/platform/config"
+	"github.com/dohernandez/kit-template/internal/platform/handler"
+	"github.com/dohernandez/kit-template/internal/platform/service"
 	grpcZapLogger "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	grpcRecovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	grpcCtxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
@@ -31,12 +33,17 @@ type Locator struct {
 	DBx     *sqlx.DB
 	Storage *sqluct.Storage
 
+	handler.Provider
+
 	logger *zapctxd.Logger
 	ctxd.LoggerProvider
 
 	clockSvc.ClockProvider
 
 	GRPCUnitaryInterceptors []grpc.UnaryServerInterceptor
+
+	KitTemplateService     *service.KitTemplateService
+	KitTemplateRESTService *service.KitTemplateRESTService
 
 	// use cases
 }
@@ -55,23 +62,13 @@ func NewServiceLocator(cfg *config.Config, opts ...Option) (*Locator, error) {
 		o(&l)
 	}
 
+	handler.AppendStandardHandlers(cfg.ServiceName, &l.Provider)
+	handler.SetResponseModifier(&l.Provider)
+
 	var err error
 
 	// logger stuff
-	if l.LoggerProvider == nil {
-		l.logger = zapctxd.New(zapctxd.Config{
-			Level:   cfg.Log.Level,
-			DevMode: cfg.IsDev(),
-			FieldNames: ctxd.FieldNames{
-				Timestamp: "timestamp",
-				Message:   "message",
-			},
-			StripTime: cfg.Log.LockTime,
-			Output:    cfg.Log.Output,
-		})
-
-		l.LoggerProvider = l.logger
-	}
+	l.setLogger()
 
 	// Database stuff.
 	l.Config.PostgresDB.DriverName = driver
@@ -83,20 +80,32 @@ func NewServiceLocator(cfg *config.Config, opts ...Option) (*Locator, error) {
 
 	l.Storage = makeStorage(l.DBx, l.CtxdLogger())
 
-	l.GRPCUnitaryInterceptors = append(l.GRPCUnitaryInterceptors, []grpc.UnaryServerInterceptor{
-		// recovering from panic
-		grpcRecovery.UnaryServerInterceptor(),
-		// adding tracing
-		grpcOpentracing.UnaryServerInterceptor(),
-		// adding logger
-		grpcCtxtags.UnaryServerInterceptor(grpcCtxtags.WithFieldExtractor(grpcCtxtags.CodeGenRequestFieldExtractor)),
-		grpcZapLogger.UnaryServerInterceptor(l.ZapLogger()),
-	}...)
+	l.setGRPCUnitaryInterceptors()
 
 	// setting up use cases dependencies
 	l.setupUsecaseDependencies()
 
+	// setting up services
+	l.setupServices()
+
 	return &l, nil
+}
+
+func (l *Locator) setLogger() {
+	if l.LoggerProvider == nil {
+		l.logger = zapctxd.New(zapctxd.Config{
+			Level:   l.Config.Log.Level,
+			DevMode: l.Config.IsDev(),
+			FieldNames: ctxd.FieldNames{
+				Timestamp: "timestamp",
+				Message:   "message",
+			},
+			StripTime: l.Config.Log.LockTime,
+			Output:    l.Config.Log.Output,
+		})
+
+		l.LoggerProvider = l.logger
+	}
 }
 
 // makeDBx initializes database.
@@ -152,7 +161,25 @@ func makeStorage(
 	return st
 }
 
+func (l *Locator) setGRPCUnitaryInterceptors() {
+	l.GRPCUnitaryInterceptors = append(l.GRPCUnitaryInterceptors, []grpc.UnaryServerInterceptor{
+		// recovering from panic
+		grpcRecovery.UnaryServerInterceptor(),
+		// adding tracing
+		grpcOpentracing.UnaryServerInterceptor(),
+		// adding logger
+		grpcCtxtags.UnaryServerInterceptor(grpcCtxtags.WithFieldExtractor(grpcCtxtags.CodeGenRequestFieldExtractor)),
+		grpcZapLogger.UnaryServerInterceptor(l.ZapLogger()),
+	}...)
+}
+
 func (l *Locator) setupUsecaseDependencies() {
+}
+
+func (l *Locator) setupServices() {
+	l.KitTemplateService = service.NewKitTemplateService()
+
+	l.KitTemplateRESTService = service.NewKitTemplateRESTService(l.KitTemplateService)
 }
 
 // ZapLogger returns *zap.Logger that used in Logger.

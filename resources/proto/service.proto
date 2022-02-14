@@ -16,6 +16,7 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   schemes: HTTP;
   consumes: "application/json"
   produces: "application/json"
+  /*
   responses: {
     key: "400"
     value: {
@@ -27,10 +28,12 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
       }
     }
   }
+  */
 };
 
 // The API manages ... .
 service KitTemplateService {
+/*
   // PostFuncName ... .
   //
   // Receives a request with ... . Responses ... .
@@ -181,4 +184,5 @@ message GetFuncResponse {
     // ... .
     int64 responseValue2 = 2;
   }
+*/
 }

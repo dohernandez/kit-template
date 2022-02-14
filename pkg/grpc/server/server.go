@@ -71,18 +71,18 @@ func WithReflective() Option {
 	}
 }
 
+// WithAddrAssigned sets service to ask for listener assigned address. Mainly used when the port to the listener is assigned dynamically.
+func WithAddrAssigned() Option {
+	return func(srv *Server) {
+		srv.AddrAssigned = make(chan string, 1)
+	}
+}
+
 // WithMetrics sets the metrics, metrics handler and metrics listener. Used to initialize all metrics and create http.Serve
 // for /metrics endpoint.
 func WithMetrics(metrics *grpcPrometheus.ServerMetrics) Option {
 	return func(srv *Server) {
 		srv.metrics = metrics
-	}
-}
-
-// WithAddrAssigned sets service to ask for listener assigned address. Mainly used when the port to the listener is assigned dynamically.
-func WithAddrAssigned() Option {
-	return func(srv *Server) {
-		srv.AddrAssigned = make(chan string, 1)
 	}
 }
 

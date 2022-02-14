@@ -184,8 +184,6 @@ func (s *Server) Start() error {
 		s.AddrAssigned <- s.listener.Addr().String()
 	}
 
-	s.AddrAssigned <- s.listener.Addr().String()
-
 	if err := <-s.listeningError; err != nil {
 		return ctxd.WrapError(context.Background(), err, "REST server failed",
 			"addr", s.listener.Addr().String())

@@ -1,8 +1,6 @@
 package service
 
 import (
-	"context"
-
 	"google.golang.org/grpc"
 )
 
@@ -21,13 +19,7 @@ func NewKitTemplateRESTService(service *KitTemplateService) *KitTemplateRESTServ
 	}
 }
 
-// WithUnaryServerInterceptor set the UnaryServerInterceptor for the REST service.
-func (s *KitTemplateRESTService) WithUnaryServerInterceptor(i grpc.UnaryServerInterceptor) *KitTemplateRESTService {
-	s.unaryInt = i
-
-	return s
-}
-
+/*
 // PostFuncName is wrapper on the unary RPC to ... for REST calls.
 func (s *KitTemplateRESTService) PostFuncName(ctx context.Context, req interface{}) (interface{}, error) {
 	info := &grpc.UnaryServerInfo{
@@ -43,3 +35,4 @@ func (s *KitTemplateRESTService) PostFuncName(ctx context.Context, req interface
 
 	return resp, err
 }
+*/

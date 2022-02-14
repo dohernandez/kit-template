@@ -2,7 +2,9 @@ package kit_template_test
 
 import (
 	"context"
+	"fmt"
 	"io/ioutil"
+	"net"
 	"testing"
 
 	"github.com/bool64/ctxd"
@@ -47,10 +49,40 @@ func TestIntegration(t *testing.T) {
 	dbm := initDBManager(deps.Storage)
 	dbmCleaner := initDBMCleaner(dbm)
 
-	srvGRPC, srv, err := app.NewGRPCService(ctx, cfg, deps, grpcServer.WithAddrAssigned())
+	grpcListener, err := net.Listen("tcp", fmt.Sprintf(":%d", cfg.AppGRPCPort))
+	must.NotFail(ctxd.WrapError(ctx, err, "failed to init GRPC service listener"))
+
+	srvGRPC, err := grpcServer.InitGRPCService(
+		ctx,
+		grpcServer.InitGRPCServiceConfig{
+			Listener:       grpcListener,
+			Service:        deps.KitTemplateService,
+			Logger:         deps.ZapLogger(),
+			UInterceptor:   deps.GRPCUnitaryInterceptors,
+			WithReflective: cfg.IsDev(),
+			Options: []grpcServer.Option{
+				grpcServer.WithAddrAssigned(),
+			},
+		},
+	)
 	must.NotFail(ctxd.WrapError(ctx, err, "failed to init GRPC service"))
 
-	srvREST, err := app.NewRESTService(ctx, cfg, deps, srv, grpcRest.WithAddrAssigned())
+	restTListener, err := net.Listen("tcp", fmt.Sprintf(":%d", cfg.AppRESTPort))
+	must.NotFail(ctxd.WrapError(ctx, err, "failed to init REST service listener"))
+
+	srvREST, err := grpcRest.InitRESTService(
+		ctx,
+		grpcRest.InitRESTServiceConfig{
+			Listener:         restTListener,
+			Service:          deps.KitTemplateRESTService,
+			UInterceptor:     deps.GRPCUnitaryInterceptors,
+			Handlers:         deps.Handlers,
+			ResponseModifier: deps.ResponseModifier,
+			Options: []grpcRest.Option{
+				grpcRest.WithAddrAssigned(),
+			},
+		},
+	)
 	must.NotFail(ctxd.WrapError(ctx, err, "failed to init REST service"))
 
 	services := servicing.WithGracefulSutDown(
