@@ -9,4 +9,4 @@
 Project template with GitHub actions for Go using GPRC with REST.
 
 # Usage
-Create a new repository from this template, check out it and run ./run_me.sh to replace template name with name of your repository.
+Create a new repository from this template, check out it and run `./run_me.sh` to replace template name with name of your repository.
