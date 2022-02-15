@@ -26,8 +26,7 @@ func main() {
 	metricsListener, err := net.Listen("tcp", fmt.Sprintf(":%d", cfg.AppMetricsPort))
 	must.NotFail(ctxd.WrapError(ctx, err, "failed to init Metrics service listener"))
 
-	srvMetrics, err := grpcMetrics.NewMetricsService(ctx, metricsListener)
-	must.NotFail(ctxd.WrapError(ctx, err, "failed to init Metrics service"))
+	srvMetrics := grpcMetrics.NewMetricsService(ctx, metricsListener)
 
 	// initialize locator
 	deps, err := app.NewServiceLocator(cfg, func(l *app.Locator) {
@@ -41,7 +40,7 @@ func main() {
 	grpcListener, err := net.Listen("tcp", fmt.Sprintf(":%d", cfg.AppGRPCPort))
 	must.NotFail(ctxd.WrapError(ctx, err, "failed to init GRPC service listener"))
 
-	srvGRPC, err := grpcServer.InitGRPCService(
+	srvGRPC := grpcServer.InitGRPCService(
 		ctx,
 		grpcServer.InitGRPCServiceConfig{
 			Listener:       grpcListener,
@@ -54,7 +53,6 @@ func main() {
 			},
 		},
 	)
-	must.NotFail(ctxd.WrapError(ctx, err, "failed to init GRPC service"))
 
 	restTListener, err := net.Listen("tcp", fmt.Sprintf(":%d", cfg.AppRESTPort))
 	must.NotFail(ctxd.WrapError(ctx, err, "failed to init REST service listener"))

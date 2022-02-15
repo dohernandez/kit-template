@@ -52,7 +52,7 @@ func TestIntegration(t *testing.T) {
 	grpcListener, err := net.Listen("tcp", fmt.Sprintf(":%d", cfg.AppGRPCPort))
 	must.NotFail(ctxd.WrapError(ctx, err, "failed to init GRPC service listener"))
 
-	srvGRPC, err := grpcServer.InitGRPCService(
+	srvGRPC := grpcServer.InitGRPCService(
 		ctx,
 		grpcServer.InitGRPCServiceConfig{
 			Listener:       grpcListener,
@@ -65,7 +65,6 @@ func TestIntegration(t *testing.T) {
 			},
 		},
 	)
-	must.NotFail(ctxd.WrapError(ctx, err, "failed to init GRPC service"))
 
 	restTListener, err := net.Listen("tcp", fmt.Sprintf(":%d", cfg.AppRESTPort))
 	must.NotFail(ctxd.WrapError(ctx, err, "failed to init REST service listener"))

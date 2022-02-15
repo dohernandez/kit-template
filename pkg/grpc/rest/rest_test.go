@@ -22,7 +22,7 @@ func runShutdownTest(t *testing.T, opts ...rest.Option) {
 
 	serverMuxOpts := append(([]rest.Option)(nil), opts...)
 
-	srv, err := rest.NewServer(serverMuxOpts...)
+	srv, err := rest.NewServer(context.Background(), serverMuxOpts...)
 	require.NoError(t, err)
 
 	shutdownCh := make(chan struct{})

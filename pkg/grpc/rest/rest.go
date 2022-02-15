@@ -91,7 +91,7 @@ type Server struct {
 }
 
 // NewServer initiates a new wrapped mux server.
-func NewServer(opts ...Option) (*Server, error) {
+func NewServer(ctx context.Context, opts ...Option) (*Server, error) {
 	srv := &Server{
 		config: defaultConfig(),
 	}
@@ -106,14 +106,14 @@ func NewServer(opts ...Option) (*Server, error) {
 	for _, register := range srv.config.services {
 		err := register(mux)
 		if err != nil {
-			return nil, ctxd.WrapError(context.Background(), err, "failed to register handler service")
+			return nil, ctxd.WrapError(ctx, err, "failed to register handler service")
 		}
 	}
 
 	for _, handlerPath := range srv.config.handlerPaths {
 		err := handlerPath(mux)
 		if err != nil {
-			return nil, ctxd.WrapError(context.Background(), err, "failed to set handler path to service")
+			return nil, ctxd.WrapError(ctx, err, "failed to set handler path to service")
 		}
 	}
 

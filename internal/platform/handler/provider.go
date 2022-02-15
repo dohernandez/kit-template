@@ -14,6 +14,7 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
+// Provider defines service locator interface.
 type Provider struct {
 	// Handlers contains non-api handlers to add to rest service.
 	Handlers         []grpcRest.HandlerPathOption
@@ -23,7 +24,7 @@ type Provider struct {
 // AppendStandardHandlers registers non-api handlers.
 func AppendStandardHandlers(serviceName string, p *Provider) {
 	appendRootHandlers(serviceName, p)
-	appendApiDocsHandlers(serviceName, p)
+	appendAPIDocsHandlers(serviceName, p)
 }
 
 // appendRootHandlers registers root handlers.
@@ -44,8 +45,8 @@ func appendRootHandlers(serviceName string, p *Provider) {
 	)
 }
 
-// appendApiDocsHandlers registers handlers to display api documentation.
-func appendApiDocsHandlers(serviceName string, p *Provider) {
+// appendAPIDocsHandlers registers handlers to display api documentation.
+func appendAPIDocsHandlers(serviceName string, p *Provider) {
 	// handler root path
 	swh := v3.NewHandler(serviceName, "/docs/service.swagger.json", "/docs/")
 
@@ -95,6 +96,7 @@ func appendApiDocsHandlers(serviceName string, p *Provider) {
 	)
 }
 
+// SetResponseModifier used to modify the Response status code using x-http-code header by setting a different code than 200 on success or 500 on failure.
 func SetResponseModifier(p *Provider) {
 	p.ResponseModifier = func(ctx context.Context, w http.ResponseWriter, _ proto.Message) error {
 		md, ok := mux.ServerMetadataFromContext(ctx)

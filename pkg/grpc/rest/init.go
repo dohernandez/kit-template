@@ -11,6 +11,7 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
+// InitRESTServiceConfig REST server init configuration.
 type InitRESTServiceConfig struct {
 	Listener         net.Listener
 	Service          ServiceServer
@@ -22,14 +23,17 @@ type InitRESTServiceConfig struct {
 
 // InitRESTService initialize an instance of REST service based on the GRPC service.
 func InitRESTService(
-	_ context.Context,
+	ctx context.Context,
 	cfg InitRESTServiceConfig,
 ) (*Server, error) {
 	cfg.Service.WithUnaryServerInterceptor(
 		grpcMiddleware.ChainUnaryServer(cfg.UInterceptor...),
 	)
 
-	opts := append(cfg.Options,
+	opts := make([]Option, 0)
+
+	opts = append(opts, cfg.Options...)
+	opts = append(opts,
 		WithListener(cfg.Listener, true),
 		// use to registering point service using the point service registerer
 		WithService(cfg.Service),
@@ -53,5 +57,5 @@ func InitRESTService(
 		)
 	}
 
-	return NewServer(opts...)
+	return NewServer(ctx, opts...)
 }

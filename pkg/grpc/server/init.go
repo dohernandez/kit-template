@@ -9,6 +9,7 @@ import (
 	"google.golang.org/grpc"
 )
 
+// InitGRPCServiceConfig GRPC server init configuration.
 type InitGRPCServiceConfig struct {
 	Listener       net.Listener
 	Service        ServiceServer
@@ -22,10 +23,13 @@ type InitGRPCServiceConfig struct {
 func InitGRPCService(
 	_ context.Context,
 	cfg InitGRPCServiceConfig,
-) (*Server, error) {
+) *Server {
 	grpcZapLogger.ReplaceGrpcLoggerV2(cfg.Logger)
 
-	opts := append(cfg.Options,
+	opts := make([]Option, 0)
+
+	opts = append(opts, cfg.Options...)
+	opts = append(opts,
 		WithListener(cfg.Listener, true),
 		// registering point service using the point service registerer
 		WithService(cfg.Service),
@@ -37,5 +41,5 @@ func InitGRPCService(
 		opts = append(opts, WithReflective())
 	}
 
-	return NewServer(opts...), nil
+	return NewServer(opts...)
 }

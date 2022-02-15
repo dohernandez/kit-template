@@ -26,6 +26,6 @@ type HandlerPathOption struct {
 	Method string
 	// PathPattern the http route path.
 	PathPattern string
-	// Handler is what to do when the request fulfil the method and path pattern.
+	// Handler is what to do when the request fulfill the method and path pattern.
 	Handler func(w http.ResponseWriter, r *http.Request, _ map[string]string)
 }

@@ -9,10 +9,10 @@ import (
 func NewMetricsService(
 	_ context.Context,
 	listener net.Listener,
-) (*Server, error) {
+) *Server {
 	opts := []Option{
 		WithListener(listener, true),
 	}
 
-	return NewServer(opts...), nil
+	return NewServer(opts...)
 }

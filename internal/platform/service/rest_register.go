@@ -9,7 +9,7 @@ import (
 // RegisterHandlerService registers the service implementation to mux.
 func (s *KitTemplateRESTService) RegisterHandlerService(mux *runtime.ServeMux) error {
 	// register rest service
-	//return api.RegisterKitTemplateServiceHandlerServer(context.Background(), mux, s)
+	// return api.RegisterKitTemplateServiceHandlerServer(context.Background(), mux, s)
 	return nil
 }
 
