@@ -14,6 +14,7 @@ project_name_camel_case=$(echo "$project_name" | perl -pe 's/(^|_|-| )./uc($&)/g
 project_name_lower_camel_case=$(echo "$project_name_camel_case" |  perl -nE 'say lcfirst')
 project_name_trim=$(echo "$project_name_lower_camel_case" | perl -pe 's/./lc($&)/ge')
 project_name_title=$(echo "$project_name" | perl -pe 's/(^|_|-| )./uc($&)/ge;s/_|-/ /g')
+project_name_snake_case=$(echo "$project_name" | perl -pe 's/./lc($&)/ge;s/-| /_/g')
 
 
 echo "## Replacing all kit-template references by $project_name"
@@ -28,6 +29,8 @@ echo "## Replacing all kittemplate references by $project_name_trim"
 find . -type f -not -name run_me.sh -not -path "./.git/*" -print0 | xargs -0 perl -i -pe "s|kittemplate|$project_name_trim|g"
 echo "## Replacing all Kit Template references by $project_name_title"
 find . -type f -not -name run_me.sh -not -path "./.git/*" -print0 | xargs -0 perl -i -pe "s|Kit Template|$project_name_title|g"
+echo "## Replacing all kit_template references by $project_name_snake_case"
+find . -type f -not -name run_me.sh -not -path "./.git/*" -print0 | xargs -0 perl -i -pe "s|kit_template|$project_name_snake_case|g"
 
 echo "## Renaming cmd/kit-template to cmd/$project_name"
 mv cmd/kit-template "cmd/$project_name"
