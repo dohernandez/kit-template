@@ -38,6 +38,7 @@ endif
 # Add your custom targets here.
 BUILD_LDFLAGS="-s -w"
 BUILD_PKG = ./cmd/kit-template
+INTEGRATION_DOCKER_COMPOSE = ./docker-compose.integration-test.yml
 
 APP_PATH = $(shell pwd)
 APP_SCRIPTS = $(APP_PATH)/resources/app/scripts
@@ -57,3 +58,11 @@ proto-gen-code: protoc-cli
 	protoc --proto_path=$(SRC_PROTO_PATH) $(SRC_PROTO_PATH)/*.proto  --go_opt=paths=source_relative --go_out=:$(GO_PROTO_PATH) --go-grpc_opt=paths=source_relative --go-grpc_out=:$(GO_PROTO_PATH) --grpc-gateway_opt=paths=source_relative --grpc-gateway_out=:$(GO_PROTO_PATH) --openapiv2_out=:$(SWAGGER_PATH)
 	@cat $(SWAGGER_PATH)/service.swagger.json | jq del\(.paths[][].responses.'"default"'\) > $(SWAGGER_PATH)/service.swagger.json.tmp
 	@mv $(SWAGGER_PATH)/service.swagger.json.tmp $(SWAGGER_PATH)/service.swagger.json
+
+## Run integration benchmark
+bench-integration:
+	@make start-deps
+	@echo ">> running integration benchmark"
+	@$(GO) test -tags bench -bench=. -count=5 -benchtime=20000x -run=^a  benchmark_test.go | tee /dev/tty >bench-$(shell git symbolic-ref HEAD --short | tr / - 2>/dev/null).txt
+	@test -s $(GOPATH)/bin/benchstat || GO111MODULE=off GOFLAGS= GOBIN=$(GOPATH)/bin $(GO) get -u golang.org/x/perf/cmd/benchstat
+	@benchstat bench-$(shell git symbolic-ref HEAD --short | tr / - 2>/dev/null).txt

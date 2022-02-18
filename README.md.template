@@ -17,6 +17,7 @@
         - [Running the service locally](#running-the-service-locally)
         - [Generate code from proto file](#generate-code-from-proto-file)
     - [Testing](#testing)
+    - [Metrics](#metrics)
     - [Migrations](#migrations)
 - [Enhancement](#enhancement)
 
@@ -76,6 +77,12 @@ The output should look something like this
 echo "output of the logs" 
 ```
 
+To destroy the app run the command:
+
+```shell
+docker-compose down -v
+```
+
 [[table of contents]](#table-of-contents)
 
 #### Generate code from proto file
@@ -125,6 +132,20 @@ To install Evans following the instructions from it GitHub page https://github.c
 Also, you can do test thro REST calls. For that you can use the service REST api documentation which uses Swagger interface.
 
 Launch the service by [Running the service locally](#running-the-service-locally). This will make the service available in http://localhost:8080 (remember that the port is base on the configuration you provide in the `.env` file. This example is based on the `.env.template` configuration) and REST api documentation can be accessible on http://localhost:8080/docs.
+
+[[table of contents]](#table-of-contents)
+
+### Metrics
+
+The service exposes some metrics such as:
+
+- Database
+- Go build info
+- Current Go process
+- Calls started/completed
+- Histogram of response latency (seconds).
+
+Metrics are available on http://localhost:8010/metrics
 
 [[table of contents]](#table-of-contents)
 
