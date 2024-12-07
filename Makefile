@@ -9,10 +9,30 @@ PWD := $(shell pwd)
 
 MODULES := \
     DEVGO_PATH=github.com/bool64/dev \
-    DEVSERVICEGO_PATH=github.com/dohernandez/go-grpc-service \
     DEVGRPCGO_PATH=github.com/dohernandez/dev-grpc \
 
--include $(PWD)/vendor/github.com/dohernandez/go-grpc-service/dev/makefiles/main.mk
+GO ?= go
+export GO111MODULE = on
+
+ifneq "$(wildcard ./vendor )" ""
+  modVendor =  -mod=vendor
+  ifeq (,$(findstring -mod,$(GOFLAGS)))
+      export GOFLAGS := ${GOFLAGS} ${modVendor}
+  endif
+  ifneq "$(wildcard ./vendor/github.com/dohernandez/go-grpc-service)" ""
+  	DEVSERVICEGO_PATH := ./vendor/github.com/dohernandez/go-grpc-service
+  endif
+endif
+
+ifeq ($(DEVSERVICEGO_PATH),)
+	DEVSERVICEGO_PATH := $(shell GO111MODULE=on $(GO) list ${modVendor} -f '{{.Dir}}' -m github.com/dohernandez/go-grpc-service)
+	ifeq ($(DEVSERVICEGO_PATH),)
+    	$(info Module github.com/dohernandez/go-grpc-service not found, downloading.)
+    	DEVSERVICEGO_PATH := $(shell export GO111MODULE=on && $(GO) get github.com/dohernandez/go-grpc-service && $(GO) list -f '{{.Dir}}' -m github.com/dohernandez/go-grpc-service)
+	endif
+endif
+
+-include $(DEVSERVICEGO_PATH)/dev/makefiles/main.mk
 
 # Add your include here with based path to the module.
 
@@ -24,12 +44,12 @@ BUILD_LDFLAGS="-s -w"
 BUILD_PKG = ./cmd/...
 BINARY_NAME = kit-template
 
-DOCKER_COMPOSE_PROFILE = "all"
-INTEGRATION_DOCKER_COMPOSE_PROFILE = "integration-test"
+DOCKER_COMPOSE_PROFILE = app
+INTEGRATION_DOCKER_COMPOSE_PROFILE = integration-test
 
 -include $(DEVSERVICEGO_PATH)/makefiles/dep.mk
 -include $(DEVSERVICEGO_PATH)/makefiles/docker.mk
--include $(DEVSERVICEGO_PATH)makefiles/test-integration.mk
+-include $(DEVSERVICEGO_PATH)/makefiles/test-integration.mk
 -include $(DEVSERVICEGO_PATH)/makefiles/database.mk
 -include $(DEVSERVICEGO_PATH)/makefiles/mockery.mk
 
@@ -61,12 +81,33 @@ proto-gen: proto-gen-code-swagger
 	@cat $(SWAGGER_PATH)/service.swagger.json | jq del\(.paths[][].responses.'"default"'\) > $(SWAGGER_PATH)/service.swagger.json.tmp
 	@mv $(SWAGGER_PATH)/service.swagger.json.tmp $(SWAGGER_PATH)/service.swagger.json
 
-## Run docker-compose down from file DOCKER_COMPOSE_PATH with project name DOCKER_COMPOSE_PROJECT_NAME
-dc-up-dev:
-	@echo "Starting docker compose for development."
-	@DOCKER_COMPOSE_PROFILE=dev docker-compose -f docker-compose.yml -f docker-compose.development.yml up -d
+check-envfile:
+	@test ! -f .env && echo "Please create .env file before. Run \`make envfile\`." && exit 1 || true
 
-## Run docker-compose down with project name DOCKER_COMPOSE_PROJECT_NAME
-dc-down-dev:
+## Run docker-compose up for app profile
+dc-up-app: check-envfile
+	@echo "Starting docker compose for application."
+	@DOCKER_COMPOSE_PROFILE=app  \
+	DOCKER_COMPOSE_PATH=docker-compose.yml \
+	make dc-up
+
+## Run docker-compose down for app profile
+dc-down-app: check-envfile
+	@echo "Stopping docker compose for application."
+	@DOCKER_COMPOSE_PROFILE=app \
+    DOCKER_COMPOSE_PATH=docker-compose.yml \
+    make dc-down
+
+## Run docker-compose up for dev profile
+dc-up-dev: check-envfile
+	@echo "Starting docker compose for development."
+	@DOCKER_COMPOSE_PROFILE=app  \
+	DOCKER_COMPOSE_PATH="docker-compose.yml docker-compose.development.yml" \
+	make dc-up
+
+## Run docker-compose down for dev profile
+dc-down-dev: check-envfile
 	@echo "Stopping docker compose for development."
-	@DOCKER_COMPOSE_PROFILE=dev docker-compose -f docker-compose.yml -f docker-compose.development.yml down -v
+	@DOCKER_COMPOSE_PROFILE=app \
+	DOCKER_COMPOSE_PATH="docker-compose.yml docker-compose.development.yml" \
+	make dc-down

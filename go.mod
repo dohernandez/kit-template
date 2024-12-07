@@ -6,7 +6,7 @@ require (
 	github.com/bool64/ctxd v1.2.1
 	github.com/bool64/dev v0.2.37
 	github.com/cucumber/godog v0.15.0
-	github.com/dohernandez/go-grpc-service v0.0.0-20241207143540-00c11e169cfc
+	github.com/dohernandez/go-grpc-service v0.0.0-20241207163743-a25ebeca140f
 	github.com/dohernandez/servers v0.8.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.24.0
 	google.golang.org/grpc v1.68.1

@@ -119,6 +119,10 @@ github.com/dohernandez/go-grpc-service v0.0.0-20241207143109-e242147bb45e h1:qsD
 github.com/dohernandez/go-grpc-service v0.0.0-20241207143109-e242147bb45e/go.mod h1:iPDaKt8hzgFvXkBIDth4snl86qXpHidywpZKzatGes4=
 github.com/dohernandez/go-grpc-service v0.0.0-20241207143540-00c11e169cfc h1:Hh+JMrjATqZ/L84HZFZhWqwzcRoAGgUKrRfrs9eCnJM=
 github.com/dohernandez/go-grpc-service v0.0.0-20241207143540-00c11e169cfc/go.mod h1:iPDaKt8hzgFvXkBIDth4snl86qXpHidywpZKzatGes4=
+github.com/dohernandez/go-grpc-service v0.0.0-20241207152937-2e074f7de87c h1:NLxtU7twDgjWDMEPZ9pxm/bB75pFPuBvStHW0v8ltRY=
+github.com/dohernandez/go-grpc-service v0.0.0-20241207152937-2e074f7de87c/go.mod h1:iPDaKt8hzgFvXkBIDth4snl86qXpHidywpZKzatGes4=
+github.com/dohernandez/go-grpc-service v0.0.0-20241207163743-a25ebeca140f h1:lIfw4gn0eHpK8QezE9BkVWPRFII1j75Nj04VV8DKmvA=
+github.com/dohernandez/go-grpc-service v0.0.0-20241207163743-a25ebeca140f/go.mod h1:iPDaKt8hzgFvXkBIDth4snl86qXpHidywpZKzatGes4=
 github.com/dohernandez/goservicing v1.0.1 h1:DNUZqjD1RwLQ5kGDRHLufkA5WqiOFAavTAwk8q0P7cM=
 github.com/dohernandez/goservicing v1.0.1/go.mod h1:2sr8jiJyr6+j9EdKxhJboZdtJ0SXZM6ZTz2mo9ubSKM=
 github.com/dohernandez/servers v0.8.0 h1:jRjRoZ6l4f8bMI0Mj/q+HSCGXJ3sN4iCNdkNbox2O+M=

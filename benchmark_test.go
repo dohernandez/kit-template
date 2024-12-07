@@ -21,9 +21,12 @@ func BenchmarkIntegration(b *testing.B) {
 	ctx := context.Background()
 
 	// load configurations
+	err := sconfig.WithEnvFiles(".env.integration-test")
+	must.NotFail(ctxd.WrapError(ctx, err, "failed to load env from .env.integration-test"))
+
 	var cfg config.Config
 
-	err := sconfig.LoadConfig(&cfg)
+	err = sconfig.LoadConfig(&cfg)
 	must.NotFail(ctxd.WrapError(ctx, err, "failed to load configurations"))
 
 	cfg.Environment = "test"
