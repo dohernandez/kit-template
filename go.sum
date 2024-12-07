@@ -29,6 +29,8 @@ github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc/go.mod h1:LOuy
 github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf/go.mod h1:ybxpYRFXyAe+OPACYpWeL0wqObRcbAqCMya13uyzqw0=
 github.com/andybalholm/brotli v1.0.4 h1:V7DdXeJtZscaqfNuAdSRuRFzuiKlHSC/Zh3zl9qY3JY=
 github.com/andybalholm/brotli v1.0.4/go.mod h1:fO7iG3H7G2nSZ7m0zPUDn85XEX2GTukHGRSepvi9Eig=
+github.com/andybalholm/brotli v1.1.1 h1:PR2pgnyFznKEugtsUo0xLdDop5SKXd5Qf5ysW+7XdTA=
+github.com/andybalholm/brotli v1.1.1/go.mod h1:05ib4cKhjx3OQYUY22hTVd34Bc8upXjOLL2rKwwZBoA=
 github.com/antihax/optional v1.0.0/go.mod h1:uupD/76wgC+ih3iEmQUL+0Ugr19nfwCT1kdvxnR2qWY=
 github.com/armon/circbuf v0.0.0-20150827004946-bbbad097214e/go.mod h1:3U/XgcO3hCbHZ8TKRvWD2dDTCfh9M9ya+I9JpbB7O8o=
 github.com/armon/go-metrics v0.0.0-20180917152333-f0300d1749da/go.mod h1:Q73ZrmVTwzkszR9V5SSuryQ31EELlFMUz1kKyl939pY=
@@ -123,6 +125,8 @@ github.com/dohernandez/go-grpc-service v0.0.0-20241207152937-2e074f7de87c h1:NLx
 github.com/dohernandez/go-grpc-service v0.0.0-20241207152937-2e074f7de87c/go.mod h1:iPDaKt8hzgFvXkBIDth4snl86qXpHidywpZKzatGes4=
 github.com/dohernandez/go-grpc-service v0.0.0-20241207163743-a25ebeca140f h1:lIfw4gn0eHpK8QezE9BkVWPRFII1j75Nj04VV8DKmvA=
 github.com/dohernandez/go-grpc-service v0.0.0-20241207163743-a25ebeca140f/go.mod h1:iPDaKt8hzgFvXkBIDth4snl86qXpHidywpZKzatGes4=
+github.com/dohernandez/go-grpc-service v0.0.0-20241207164330-6d5c5ec62e92 h1:zvtfc4pBQMdpNo/zmrH4RCyVXcj+setUqK46dutDlrA=
+github.com/dohernandez/go-grpc-service v0.0.0-20241207164330-6d5c5ec62e92/go.mod h1:1n1Hi0/I3yeAfsoNpT35d5V42BIin9iJEHIjf6d3ysQ=
 github.com/dohernandez/goservicing v1.0.1 h1:DNUZqjD1RwLQ5kGDRHLufkA5WqiOFAavTAwk8q0P7cM=
 github.com/dohernandez/goservicing v1.0.1/go.mod h1:2sr8jiJyr6+j9EdKxhJboZdtJ0SXZM6ZTz2mo9ubSKM=
 github.com/dohernandez/servers v0.8.0 h1:jRjRoZ6l4f8bMI0Mj/q+HSCGXJ3sN4iCNdkNbox2O+M=
@@ -441,6 +445,8 @@ github.com/swaggest/refl v1.0.0/go.mod h1:acYd5x8NNxivp+ZHdRZKJYz66n/qjo3Q9Sa/jA
 github.com/swaggest/rest v0.2.11/go.mod h1:7ga7cnX7NBBjzhPPEwbUc2qzLqgfLKWql/X8hKLECgE=
 github.com/swaggest/rest v0.2.69 h1:h0QdL+izv4b3UaBb95USf5xQ6g+6BoanVGDFddBM71w=
 github.com/swaggest/rest v0.2.69/go.mod h1:jf/wNhDFY7TPEsSGooy2ZEimtaNEnvpaU6SPlTaWTO4=
+github.com/swaggest/rest v0.2.70 h1:rIexSxo9iflP9/vsh4jJWdzce4LDF2MYFWUG+s/Ydgs=
+github.com/swaggest/rest v0.2.70/go.mod h1:jf/wNhDFY7TPEsSGooy2ZEimtaNEnvpaU6SPlTaWTO4=
 github.com/swaggest/swgui v1.8.2 h1:JGpRCLGLZ7EqTwHsBEOo//kx8CM7Rv3RchgvfNpB+6E=
 github.com/swaggest/swgui v1.8.2/go.mod h1:nkzGeyMfq5FstGGNJKr1LORvM4RdsjTmvWvqvyZeDDc=
 github.com/swaggest/usecase v0.1.5/go.mod h1:uubX4ZbjQK1Bnl0xX9hOYpb/IUiSoVKk/yQImawbNMU=
@@ -452,10 +458,15 @@ github.com/valyala/bytebufferpool v1.0.0 h1:GqA5TC/0021Y/b9FG4Oi9Mr3q7XYx6Kllzaw
 github.com/valyala/bytebufferpool v1.0.0/go.mod h1:6bBcMArwyJ5K/AmCkWv1jt77kVWyCJ6HpOuEn7z0Csc=
 github.com/valyala/fasthttp v1.36.0 h1:NhqfO/cB7Ajn1czkKnWkMHyPYr5nyND14ZGPk23g0/c=
 github.com/valyala/fasthttp v1.36.0/go.mod h1:t/G+3rLek+CyY9bnIE+YlMRddxVAAGjhxndDB4i4C0I=
+github.com/valyala/fasthttp v1.57.0 h1:Xw8SjWGEP/+wAAgyy5XTvgrWlOD1+TxbbvNADYCm1Tg=
+github.com/valyala/fasthttp v1.57.0/go.mod h1:h6ZBaPRlzpZ6O3H5t2gEk1Qi33+TmLvfwgLLp0t9CpE=
 github.com/valyala/tcplisten v1.0.0/go.mod h1:T0xQ8SeCZGxckz9qRXTfG43PvQ/mcWh7FwZEA7Ioqkc=
 github.com/vearutop/dynhist-go v1.1.0 h1:kufNShpt45I97L2eO3bEYTSPKBSued0prheukJUYRok=
 github.com/vearutop/dynhist-go v1.1.0/go.mod h1:mjWlwr64oGBtouxh8s/9YOXV73MYP0Q9tfKIAp8/xto=
+github.com/vearutop/dynhist-go v1.2.3 h1:EIMWszSDm6b7zmqySgx8zW2qNctE3IXUJggGlDFwJBE=
+github.com/vearutop/dynhist-go v1.2.3/go.mod h1:liiiYiwAi8ixC3DbkxooEhASTF6ysJSXy+piCrBtxEg=
 github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2/go.mod h1:UETIi67q53MR2AWcXfiuqkDkRtnGDLqkBTpCHuJHxtU=
+github.com/xyproto/randomstring v1.0.5/go.mod h1:rgmS5DeNXLivK7YprL0pY+lTuhNQW3iGxZ18UQApw/E=
 github.com/yosuke-furukawa/json5 v0.1.2-0.20201207051438-cf7bb3f354ff h1:7YqG491bE4vstXRz1lD38rbSgbXnirvROz1lZiOnPO8=
 github.com/yosuke-furukawa/json5 v0.1.2-0.20201207051438-cf7bb3f354ff/go.mod h1:sw49aWDqNdRJ6DYUtIQiaA3xyj2IL9tjeNYmX2ixwcU=
 github.com/yudai/gojsondiff v1.0.0 h1:27cbfqXLVEJ1o8I6v3y9lg8Ydm53EKqHXAOMxEGlCOA=

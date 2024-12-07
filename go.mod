@@ -6,7 +6,7 @@ require (
 	github.com/bool64/ctxd v1.2.1
 	github.com/bool64/dev v0.2.37
 	github.com/cucumber/godog v0.15.0
-	github.com/dohernandez/go-grpc-service v0.0.0-20241207163743-a25ebeca140f
+	github.com/dohernandez/go-grpc-service v0.0.0-20241207164330-6d5c5ec62e92
 	github.com/dohernandez/servers v0.8.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.24.0
 	google.golang.org/grpc v1.68.1
@@ -14,7 +14,7 @@ require (
 
 require (
 	github.com/Masterminds/squirrel v1.5.4 // indirect
-	github.com/andybalholm/brotli v1.0.4 // indirect
+	github.com/andybalholm/brotli v1.1.1 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bool64/dbdog v0.4.2 // indirect
 	github.com/bool64/godogx v0.1.1 // indirect
@@ -70,11 +70,11 @@ require (
 	github.com/stretchr/testify v1.10.0 // indirect
 	github.com/swaggest/assertjson v1.9.0 // indirect
 	github.com/swaggest/form/v5 v5.1.1 // indirect
-	github.com/swaggest/rest v0.2.69 // indirect
+	github.com/swaggest/rest v0.2.70 // indirect
 	github.com/swaggest/swgui v1.8.2 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
-	github.com/valyala/fasthttp v1.36.0 // indirect
-	github.com/vearutop/dynhist-go v1.1.0 // indirect
+	github.com/valyala/fasthttp v1.57.0 // indirect
+	github.com/vearutop/dynhist-go v1.2.3 // indirect
 	github.com/yosuke-furukawa/json5 v0.1.2-0.20201207051438-cf7bb3f354ff // indirect
 	github.com/yudai/gojsondiff v1.0.0 // indirect
 	github.com/yudai/golcs v0.0.0-20170316035057-ecda9a501e82 // indirect

@@ -78,6 +78,7 @@ jobs:
 
       - name: Run benchmark
         run: |
+          make envfile
           DOCKER_COMPOSE_PROFILE=integration-test DOCKER_COMPOSE_PROFILE=integration-test make dc-up
           export REF_NAME=new
           make bench

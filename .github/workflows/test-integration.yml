@@ -75,6 +75,7 @@ jobs:
       - name: Test
         id: test
         run: |
+          make envfile
           make test-integration
           go tool cover -func=./integration.coverprofile > integration.txt
           TOTAL=$(grep 'total:' integration.txt)
