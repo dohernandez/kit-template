@@ -1,4 +1,4 @@
-FROM golang:1.23.3
+FROM golang:1.23.3-bookworm
 
 WORKDIR /go/src/github.com/dohernandez/kit-template
 

@@ -1,23 +1,4 @@
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: kittemplate-app
-    env_file:
-      - .env
-    ports:
-      - "8000:8000"
-      - "8080:8080"
-      - "8010:8010"
-    volumes:
-      - .:/go/src/github.com/dohernandez/kit-template
-      - /tmp/go-build:/root/.cache/go-build
-    depends_on:
-      database:
-        condition: service_healthy
-    profiles: [ "app" ]
-
   database-migrate:
     image: migrate/migrate
     container_name: kittemplate-database-migrate
@@ -33,7 +14,6 @@ services:
       - "-path"
       - "/resources/migrations"
       - "up"
-    profiles: [ "integration-test", "app" ]
 
   database:
     image: postgres:17.2-alpine
@@ -51,4 +31,3 @@ services:
       timeout: 20s
       retries: 5
       start_period: 3s
-    profiles: [ "integration-test", "app" ]

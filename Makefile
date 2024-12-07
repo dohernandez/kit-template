@@ -45,8 +45,6 @@ BUILD_LDFLAGS="-s -w"
 BUILD_PKG = ./cmd/...
 BINARY_NAME = kit-template
 
-DOCKER_COMPOSE_PROFILE = app
-INTEGRATION_DOCKER_COMPOSE_PROFILE = integration-test
 
 -include $(DEVSERVICEGO_PATH)/makefiles/dep.mk
 -include $(DEVSERVICEGO_PATH)/makefiles/docker.mk
@@ -89,26 +87,26 @@ check-envfile:
 dc-up-app: check-envfile
 	@echo "Starting docker compose for application."
 	@DOCKER_COMPOSE_PROFILE=app  \
-	DOCKER_COMPOSE_PATH=docker-compose.yml \
+	DOCKER_COMPOSE_PATH="docker-compose.yml docker-compose.app.yml" \
 	make dc-up
 
 ## Run docker-compose down for app profile
 dc-down-app: check-envfile
 	@echo "Stopping docker compose for application."
 	@DOCKER_COMPOSE_PROFILE=app \
-    DOCKER_COMPOSE_PATH=docker-compose.yml \
+    DOCKER_COMPOSE_PATH="docker-compose.yml docker-compose.app.yml" \
     make dc-down
 
 ## Run docker-compose up for dev profile
 dc-up-dev: check-envfile
 	@echo "Starting docker compose for development."
 	@DOCKER_COMPOSE_PROFILE=app  \
-	DOCKER_COMPOSE_PATH="docker-compose.yml docker-compose.development.yml" \
+	DOCKER_COMPOSE_PATH="docker-compose.yml docker-compose.app.yml docker-compose.dev.yml" \
 	make dc-up
 
 ## Run docker-compose down for dev profile
 dc-down-dev: check-envfile
 	@echo "Stopping docker compose for development."
 	@DOCKER_COMPOSE_PROFILE=app \
-	DOCKER_COMPOSE_PATH="docker-compose.yml docker-compose.development.yml" \
+	DOCKER_COMPOSE_PATH="docker-compose.yml docker-compose.app.yml docker-compose.dev.yml" \
 	make dc-down

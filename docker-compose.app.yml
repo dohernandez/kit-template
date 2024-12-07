@@ -1,0 +1,19 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kittemplate-app
+    container_name: kittemplate-app
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+      - "8080:8080"
+      - "8010:8010"
+    volumes:
+      - .:/go/src/github.com/dohernandez/kit-template
+      - /tmp/go-build:/root/.cache/go-build
+    depends_on:
+      database:
+        condition: service_healthy
