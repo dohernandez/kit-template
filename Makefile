@@ -25,6 +25,7 @@ BUILD_PKG = ./cmd/...
 BINARY_NAME = kit-template
 
 DOCKER_COMPOSE_PROFILE = "all"
+INTEGRATION_DOCKER_COMPOSE_PROFILE = "integration-test"
 
 -include $(DEVSERVICEGO_PATH)/makefiles/dep.mk
 -include $(DEVSERVICEGO_PATH)/makefiles/docker.mk
