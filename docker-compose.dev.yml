@@ -1,0 +1,6 @@
+services:
+  app:
+    build:
+      dockerfile: Dockerfile.development
+    image: kittemplate-app-dev
+    container_name: kittemplate-app-dev

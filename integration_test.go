@@ -3,24 +3,19 @@ package kit_template_test
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net"
 	"testing"
 
 	"github.com/bool64/ctxd"
-	"github.com/bool64/dbdog"
-	"github.com/bool64/httpdog"
-	"github.com/bool64/sqluct"
 	"github.com/cucumber/godog"
+	service "github.com/dohernandez/go-grpc-service"
+	sapp "github.com/dohernandez/go-grpc-service/app"
+	sconfig "github.com/dohernandez/go-grpc-service/config"
+	"github.com/dohernandez/go-grpc-service/must"
 	"github.com/dohernandez/kit-template/internal/platform/app"
 	"github.com/dohernandez/kit-template/internal/platform/config"
-	grpcRest "github.com/dohernandez/kit-template/pkg/grpc/rest"
-	grpcServer "github.com/dohernandez/kit-template/pkg/grpc/server"
-	"github.com/dohernandez/kit-template/pkg/must"
-	"github.com/dohernandez/kit-template/pkg/servicing"
-	"github.com/dohernandez/kit-template/pkg/test/feature"
-	dbdogcleaner "github.com/dohernandez/kit-template/pkg/test/feature/database"
-	"github.com/nhatthm/clockdog"
+	"github.com/dohernandez/servers"
 )
 
 func TestIntegration(t *testing.T) {
@@ -31,115 +26,45 @@ func TestIntegration(t *testing.T) {
 	}
 
 	// load configurations
-	err := config.WithEnvFiles(".env.integration-test")
+	err := sconfig.WithEnvFiles(".env.integration-test")
 	must.NotFail(ctxd.WrapError(ctx, err, "failed to load env from .env.integration-test"))
-	cfg, err := config.GetConfig()
+
+	var cfg config.Config
+
+	err = sconfig.LoadConfig(&cfg)
 	must.NotFail(ctxd.WrapError(ctx, err, "failed to load configurations"))
 
 	cfg.Environment = "test"
-	cfg.Log.Output = ioutil.Discard
+	cfg.Logger.Output = io.Discard
 
-	clock := clockdog.New()
-
-	deps, err := app.NewServiceLocator(cfg, func(l *app.Locator) {
-		l.ClockProvider = clock
-	})
-	must.NotFail(ctxd.WrapError(ctx, err, "failed to init service locator"))
-
-	dbm := initDBManager(deps.Storage)
-	dbmCleaner := initDBMCleaner(dbm)
-
+	// initialize listeners
 	grpcListener, err := net.Listen("tcp", fmt.Sprintf(":%d", cfg.AppGRPCPort))
 	must.NotFail(ctxd.WrapError(ctx, err, "failed to init GRPC service listener"))
-
-	srvGRPC := grpcServer.InitGRPCService(
-		ctx,
-		grpcServer.InitGRPCServiceConfig{
-			Listener:       grpcListener,
-			Service:        deps.KitTemplateService,
-			Logger:         deps.ZapLogger(),
-			UInterceptor:   deps.GRPCUnitaryInterceptors,
-			WithReflective: cfg.IsDev(),
-			Options: []grpcServer.Option{
-				grpcServer.WithAddrAssigned(),
-			},
-		},
-	)
 
 	restTListener, err := net.Listen("tcp", fmt.Sprintf(":%d", cfg.AppRESTPort))
 	must.NotFail(ctxd.WrapError(ctx, err, "failed to init REST service listener"))
 
-	srvREST, err := grpcRest.InitRESTService(
-		ctx,
-		grpcRest.InitRESTServiceConfig{
-			Listener:         restTListener,
-			Service:          deps.KitTemplateRESTService,
-			UInterceptor:     deps.GRPCUnitaryInterceptors,
-			Handlers:         deps.Handlers,
-			ResponseModifier: deps.ResponseModifier,
-			Options: []grpcRest.Option{
-				grpcRest.WithAddrAssigned(),
-			},
-		},
+	// initialize locator
+	deps, err := app.NewServiceLocator(
+		&cfg,
+		sapp.WithGRPC(
+			servers.WithListener(grpcListener, true),
+		),
+		sapp.WithGRPCRest(
+			servers.WithAddrAssigned(),
+			servers.WithListener(restTListener, true),
+		),
 	)
-	must.NotFail(ctxd.WrapError(ctx, err, "failed to init REST service"))
+	must.NotFail(ctxd.WrapError(ctx, err, "failed to init service locator"))
 
-	services := servicing.WithGracefulSutDown(
-		func(ctx context.Context) {
-			app.GracefulDBShutdown(ctx, deps)
+	service.RunFeatures(t, ctx, &service.FeaturesConfig{
+		FeaturePath: "features",
+		Locator:     deps.Locator,
+		FeatureContextFunc: func(_ *testing.T, _ *godog.ScenarioContext) {
+			// Add step definitions
 		},
-	)
-
-	go func() {
-		err = services.Start(ctx,
-			func(ctx context.Context, msg string) {
-				deps.CtxdLogger().Important(ctx, msg)
-			},
-			srvGRPC,
-			srvREST,
-		)
-		must.NotFail(ctxd.WrapError(ctx, err, "failed to start the services"))
-	}()
-
-	baseRESTURL := <-srvREST.AddrAssigned
-	local := httpdog.NewLocal(baseRESTURL)
-
-	feature.RunFeatures(t, "features", func(_ *testing.T, s *godog.ScenarioContext) {
-		local.RegisterSteps(s)
-
-		dbm.RegisterSteps(s)
-		dbmCleaner.RegisterSteps(s)
-
-		clock.RegisterContext(s)
+		Tables: map[string]any{
+			// "table_name": new(model.TableModel),
+		},
 	})
-
-	must.NotFail(services.Close())
-}
-
-func initDBManager(storage *sqluct.Storage) *dbdog.Manager {
-	tableMapper := dbdog.NewTableMapper()
-
-	dbm := dbdog.Manager{
-		TableMapper: tableMapper,
-	}
-
-	dbm.Instances = map[string]dbdog.Instance{
-		"postgres": {
-			Storage: storage,
-			Tables:  map[string]interface{}{
-				// "table_name":  new(model.TableModel),
-			},
-			PostCleanup: map[string][]string{
-				// "table_name":  {"ALTER SEQUENCE table_name_id_seq RESTART"},
-			},
-		},
-	}
-
-	return &dbm
-}
-
-func initDBMCleaner(dbm *dbdog.Manager) *dbdogcleaner.ManagerCleaner {
-	return &dbdogcleaner.ManagerCleaner{
-		Manager: dbm,
-	}
 }

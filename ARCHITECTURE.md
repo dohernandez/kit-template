@@ -26,13 +26,10 @@ The service makes use of its own private **PostgreSQL** database essentially to 
 │   │   ├── config # contains application configuration.
 │   │   ├── service # contains grpc service implementations.
 │   |   ├── storage # contains usecase storage implementations.
-├── pkg # MUST NOT import internal packages. Packages placed here should be considered as vendor.
 ├── resources # RECOMMENDED service resources. Shell helper scripts, additional files required for development, documentations.
-|   |── app
-│       ├── makefiles # contains Makefile modules.
-│       ├── scripts # contains scripts use mainly in makefile functionalities.
-|	|── docker # contains Dockerfile for dev
-|	|── migrations # contains migration files
+|   |── adr # contains architecture decision records.
+|   |── architecture # contains architecture diagrams and any other design documents or images.
+|	|── migrations # contains sql migration files for the database.
 |	|── proto # contains proto definition of the service.
 |	|── swagger # contains api documentation.
 ```
@@ -47,20 +44,6 @@ The service makes use of its own private **PostgreSQL** database essentially to 
     * Majority of handling errors happen here.
     * Can recover any panic.
     * Only if system can be returned to 100% integrity.
-
-`pkg`
-
-    * Can't import import `internal` packages. 
-    * Packages placed here should be considered as vendor.
-    * Stick to the testing package in go.
-    * NOT allowed to panic an application.
-    * Allowed to wrap errors, but keeping root cause error values.
-    * NOT allowed to set policy about any application concerns.
-    * NOT allowed to log, but access to trace information must be decoupled.
-    * Configuration and runtime changes must be decoupled.
-    * Retrieving metric and telemetry values must be decoupled.
-    * Test files belong inside the package.
-    * Focus more on unit than integration testing.
 
 `internal\domain`
 

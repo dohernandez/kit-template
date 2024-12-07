@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-option go_package = "github.com/dohernandez/kit-template/pkg/api";
+option go_package = "github.com/dohernandez/kit-template/internal/platform/service/pb/api";
 
-package kit.template;
+package api.kit.template;
 
 import "google/api/annotations.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
@@ -21,6 +21,17 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
     key: "400"
     value: {
       description: "Short description of the general 400 error.";
+      schema: {
+        json_schema: {
+          ref: ".google.rpc.Status"
+        }
+      }
+    }
+  }
+  responses: {
+    key: "500"
+    value: {
+      description: "Internal error."
       schema: {
         json_schema: {
           ref: ".google.rpc.Status"
@@ -52,17 +63,6 @@ service KitTemplateService {
           examples: {
             key: "application/json"
             value: '{}'
-          }
-        }
-      }
-      responses: {
-        key: "500"
-        value: {
-          description: "An unexpected error response."
-          schema: {
-            json_schema: {
-              ref: ".google.rpc.Status"
-            }
           }
         }
       }
@@ -98,17 +98,6 @@ service KitTemplateService {
         key: "404"
         value: {
           description: "Not found response."
-          schema: {
-            json_schema: {
-              ref: ".google.rpc.Status"
-            }
-          }
-        }
-      }
-      responses: {
-        key: "500"
-        value: {
-          description: "An unexpected error response."
           schema: {
             json_schema: {
               ref: ".google.rpc.Status"
@@ -157,8 +146,8 @@ message GetFuncRequest {
       required: []
     }
   };
-  // Leaderboard ID.
-  string leaderboard_uuid = 1;
+  // ... .
+  string getParam1 = 1;
 }
 
 message GetFuncResponse {
