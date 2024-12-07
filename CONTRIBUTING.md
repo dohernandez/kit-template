@@ -64,10 +64,17 @@ Usage
   tools:                Install all require tools to work with the project
   generate:             Runs commands described by directives within existing files, usage: "make generate SOURCE=<file.go... | packages>"
   proto-gen:            Generate code from proto file(s) and swagger file
+  dc-up-app:            Run docker-compose up for app profile
+  dc-down-app:          Run docker-compose down for app profile
+  dc-up-dev:            Run docker-compose up for dev profile
+  dc-down-dev:          Run docker-compose down for dev profile
   lint:                 Check with golangci-lint
   fix-lint:             Apply goimports and gofmt
   test-unit:            Run unit tests
   test-unit-multi:      Run unit tests multiple times, use `UNIT_TEST_COUNT=10 make test-unit-multi` to control count
+  build-linux:          Build Linux binary
+  build:                Build binary
+  run:                  Build and run binary
   bench:                Run benchmark and show result stats, iterations count controlled by BENCH_COUNT, default 5.
   bench-run:            Run benchmark, iterations count controlled by BENCH_COUNT, default 5.
   bench-stat-diff:      Show benchmark comparison with base branch.
@@ -80,11 +87,15 @@ Usage
                         Usage: "make dc-up PROFILE=<profile>, if PROFILE is not provide, start only default services"
   dc-down:              Run docker-compose down from file DOCKER_COMPOSE_PATH with project name DOCKER_COMPOSE_PROJECT_NAME
   dc-logs:              Run docker-compose logs from file DOCKER_COMPOSE_PATH with project name DOCKER_COMPOSE_PROJECT_NAME. Usage: "make generate APP=<docker-composer-service-name>"
+  test-integration:     Run integration tests
   create-migration:     Create database migration, usage: "make create-migration NAME=<migration-name>"
   migrate:              Apply migrations
   migrate-down:         Rollback migrations
   migrate-cli:          Check/install migrations tool
   mockery-cli:          Check/install mockery tool
+  protoc-cli:           Check/install protoc tool
+  proto-gen-code:       Generate code from proto file(s)
+  proto-gen-code-swagger:  Generate code from proto file(s) and swagger doc
 ```
 
 
