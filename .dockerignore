@@ -7,7 +7,7 @@
 #/bench-*.txt
 
 .env
-.env.template
+.env.*
 .gitignore
 *.yml
 *.md

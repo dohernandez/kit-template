@@ -25,10 +25,10 @@ RUN make build
 FROM ubuntu:focal
 
 RUN groupadd -r kittemplate && useradd --no-log-init -r -g kittemplate kittemplate
-USER sportbuf
+USER kittemplate
 
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=builder --chown=kittemplate:kittemplate /go/src/github.com/dohernandez/kit-template/bin/leaderboards /bin/leaderboards
+COPY --from=builder --chown=kittemplate:kittemplate /go/src/github.com/dohernandez/kit-template/bin/kit-template /bin/leaderboards
 COPY --from=builder --chown=kittemplate:kittemplate /go/src/github.com/dohernandez/kit-template/resources/migrations /resources/migrations
 COPY --from=builder --chown=kittemplate:kittemplate /bin/migrate /bin/migrate
 

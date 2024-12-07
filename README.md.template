@@ -20,6 +20,7 @@
     - [Metrics](#metrics)
     - [Migrations](#migrations)
 - [Enhancement](#enhancement)
+- [Code of Conduct](#code-of-conduct)
 
 ## Overview
 
@@ -27,7 +28,7 @@ The current architecture of the service is described in the [ARCHITECTURE.md](./
 
 For more in-depth explanations and considerations on architectural choices for the service, please refer to our [Architecture Decision Records](./resources/adr) folder.
 
-If you want to submit an architectural change to the service, please create a new entry in the ADR folder [using the template provided](./resources/adr/template.md) and open a new Pull Request for review. Each ADR should have a prefix with the consecutive number and a name. For example `002-implement-server-streaming-rpc-get-leaderboard.md`
+If you want to submit an architectural change to the service, please create a new entry in the ADR folder [using the template provided](./resources/adr/template.md) and open a new Pull Request for review. Each ADR should have a prefix with the consecutive number and a name. For example `002-implement-server-streaming.md`
 
 ## Getting started
 
@@ -198,3 +199,7 @@ If you run the above command from outside to docker network, make sure to have `
 * [Enhancement 3]
 
 [[table of contents]](#table-of-contents)
+
+## Code of Conduct
+
+See our Code of Conduct [here](CONTRIBUTING.md).
