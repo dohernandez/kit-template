@@ -11,5 +11,6 @@
 .gitignore
 *.yml
 *.md
+Dockerfile*
 
 
