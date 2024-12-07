@@ -71,9 +71,10 @@ jobs:
           git reset --hard ${{ github.event.pull_request.base.sha }}
           (make test-integration && go tool cover -func=./integration.coverprofile > integration-base.txt) || echo "No test-integration in base"
           git reset --hard $HEAD
+          make dc-down
 
-      - name: Test
-        id: test
+      - name: Test integration
+        id: test-integration
         run: |
           make test-integration
           go tool cover -func=./integration.coverprofile > integration.txt
@@ -107,7 +108,7 @@ jobs:
           header: integration-test
           message: |
             ### Integration Test Coverage
-            ${{ steps.test.outputs.total }}
+            ${{ steps.test-integration.outputs.total }}
             ${{ steps.annotate.outputs.total }}
             <details><summary>Coverage of changed lines</summary>
             

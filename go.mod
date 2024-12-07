@@ -6,7 +6,7 @@ require (
 	github.com/bool64/ctxd v1.2.1
 	github.com/bool64/dev v0.2.37
 	github.com/cucumber/godog v0.15.0
-	github.com/dohernandez/go-grpc-service v0.0.0-20241207164330-6d5c5ec62e92
+	github.com/dohernandez/go-grpc-service v0.0.0-20241207184044-b62e0930265a
 	github.com/dohernandez/servers v0.8.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.24.0
 	google.golang.org/grpc v1.68.1
@@ -48,6 +48,8 @@ require (
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgproto3/v2 v2.3.3 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
+	github.com/jackc/pgx/v5 v5.7.1 // indirect
+	github.com/jackc/puddle/v2 v2.2.2 // indirect
 	github.com/jmoiron/sqlx v1.4.0 // indirect
 	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/kelseyhightower/envconfig v1.4.0 // indirect

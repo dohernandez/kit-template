@@ -127,6 +127,10 @@ github.com/dohernandez/go-grpc-service v0.0.0-20241207163743-a25ebeca140f h1:lIf
 github.com/dohernandez/go-grpc-service v0.0.0-20241207163743-a25ebeca140f/go.mod h1:iPDaKt8hzgFvXkBIDth4snl86qXpHidywpZKzatGes4=
 github.com/dohernandez/go-grpc-service v0.0.0-20241207164330-6d5c5ec62e92 h1:zvtfc4pBQMdpNo/zmrH4RCyVXcj+setUqK46dutDlrA=
 github.com/dohernandez/go-grpc-service v0.0.0-20241207164330-6d5c5ec62e92/go.mod h1:1n1Hi0/I3yeAfsoNpT35d5V42BIin9iJEHIjf6d3ysQ=
+github.com/dohernandez/go-grpc-service v0.0.0-20241207182847-0ee9561ec97c h1:pe7T7GIubZdlUZp7YjPmTzDX5lo5nt0JtwyngQRH/xI=
+github.com/dohernandez/go-grpc-service v0.0.0-20241207182847-0ee9561ec97c/go.mod h1:e/l1pqxDT9zQBU9eEAmpNqGVsqOmYc3L1VTh3EGAT68=
+github.com/dohernandez/go-grpc-service v0.0.0-20241207184044-b62e0930265a h1:hmcTS5mH5hDu6H5mnwpyXz+OsKdnQXzVvZxufLOG2SE=
+github.com/dohernandez/go-grpc-service v0.0.0-20241207184044-b62e0930265a/go.mod h1:e/l1pqxDT9zQBU9eEAmpNqGVsqOmYc3L1VTh3EGAT68=
 github.com/dohernandez/goservicing v1.0.1 h1:DNUZqjD1RwLQ5kGDRHLufkA5WqiOFAavTAwk8q0P7cM=
 github.com/dohernandez/goservicing v1.0.1/go.mod h1:2sr8jiJyr6+j9EdKxhJboZdtJ0SXZM6ZTz2mo9ubSKM=
 github.com/dohernandez/servers v0.8.0 h1:jRjRoZ6l4f8bMI0Mj/q+HSCGXJ3sN4iCNdkNbox2O+M=
@@ -273,6 +277,10 @@ github.com/jackc/pgproto3/v2 v2.3.3 h1:1HLSx5H+tXR9pW3in3zaztoEwQYRC9SQaYUHjTSUO
 github.com/jackc/pgproto3/v2 v2.3.3/go.mod h1:WfJCnwN3HIg9Ish/j3sgWXnAfK8A9Y0bwXYU5xKaEdA=
 github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 h1:iCEnooe7UlwOQYpKFhBabPMi4aNAfoODPEFNiAnClxo=
 github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761/go.mod h1:5TJZWKEWniPve33vlWYSoGYefn3gLQRzjfDlhSJ9ZKM=
+github.com/jackc/pgx/v5 v5.7.1 h1:x7SYsPBYDkHDksogeSmZZ5xzThcTgRz++I5E+ePFUcs=
+github.com/jackc/pgx/v5 v5.7.1/go.mod h1:e7O26IywZZ+naJtWWos6i6fvWK+29etgITqrqHLfoZA=
+github.com/jackc/puddle/v2 v2.2.2 h1:PR8nw+E/1w0GLuRFSmiioY6UooMp6KJv0/61nB7icHo=
+github.com/jackc/puddle/v2 v2.2.2/go.mod h1:vriiEXHvEE654aYKXXjOvZM39qJ0q+azkZFrfEOc3H4=
 github.com/jmoiron/sqlx v1.3.4/go.mod h1:2BljVx/86SuTyjE+aPYlHCTNvZrnJXghYGpNiXLBMCQ=
 github.com/jmoiron/sqlx v1.4.0 h1:1PLqN7S1UYp5t4SrVVnt4nUVNemrDAtxlulVe+Qgm3o=
 github.com/jmoiron/sqlx v1.4.0/go.mod h1:ZrZ7UsYB/weZdl2Bxg6jCRO9c3YHl8r3ahlKmRT4JLY=
